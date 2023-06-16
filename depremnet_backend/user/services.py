@@ -51,6 +51,21 @@ def user_email_selector(email:str) -> "User":
     user = models.User.objects.filter(email=email).first()
     return user
 
+def user_id_selector(id:int) -> "User":
+    user = models.User.objects.filter(id=id).first()
+    return user
+
+def update_user(user_dc: "UserDataClass") -> "User":
+    user = user_id_selector(user_dc.id)
+    if user.email != user_dc.email:
+        raise ValueError("email should be users' email")
+    
+    user.first_name = user_dc.first_name
+    user.last_name = user_dc.last_name
+    user.phone_number = user_dc.phone_number
+
+    user.save()
+
 def create_token(user_id:int) -> str:
     payload = dict(
         id=user_id,

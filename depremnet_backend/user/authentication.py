@@ -10,7 +10,7 @@ from . import models
 class CustomAuthentication(authentication.BaseAuthentication):
 
     def authenticate(self, request):
-        token = request.COOKIES.get("jwt")
+        token = request.data["access_token"]
 
         if not token:
             return None
