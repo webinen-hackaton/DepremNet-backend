@@ -30,7 +30,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "rest_framework",
+    "geolocation_fields",
+    
     "user.apps.UserConfig",
+    
 ]
 
 MIDDLEWARE = [

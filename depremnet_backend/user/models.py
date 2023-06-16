@@ -87,12 +87,19 @@ class User(AbstractBaseUser):
     password = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12, unique=True)
     nationality_id = models.CharField(max_length=11, unique=True)
+    is_staff = models.BooleanField(default=False)
     username = None
 
     objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "phone_number", "nationality_id"]
+
+    def has_perm(self, perm, obj=None):
+     return True
+
+    def has_module_perms(self, app_label):
+        return True
 
     def __str__(self) -> str:
         return self.email
