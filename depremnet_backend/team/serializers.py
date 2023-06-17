@@ -8,6 +8,7 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = "__all__"
         read_only_fields = ["id"]
+        
 
 class TeamTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,7 +20,7 @@ class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
         fields = '__all__'
-        read_only_fields = ["id"]
+        read_only_fields = ["id"] 
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:

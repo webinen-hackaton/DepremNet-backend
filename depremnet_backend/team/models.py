@@ -23,9 +23,10 @@ class Status(models.Model): # team status
 
 class Team(models.Model):
     team_name = models.CharField(max_length=50)
-    team_type = models.ForeignKey(TeamType, on_delete=models.DO_NOTHING)
-    location = fields.PointField(verbose="location")
-    team_status = models.ForeignKey(Status, on_delete=models.DO_NOTHING)
+    team_type = models.ForeignKey(TeamType, on_delete=models.CASCADE, related_name="team_type")
+    location = fields.PointField()
+    team_status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name="team_status")
+    team_members = models.ManyToManyField(UserModel, related_name='teams')
     
     def __str__(self):
         return self.team_name

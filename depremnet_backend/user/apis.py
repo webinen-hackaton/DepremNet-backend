@@ -2,7 +2,8 @@ from rest_framework import (
     views, 
     response, 
     exceptions,
-    permissions
+    permissions,
+    status
     )
 
 from . import serializers as user_serializer
@@ -12,18 +13,33 @@ from . import (
     )
 
 from django.http import JsonResponse
+from rest_framework import generics
+from django.contrib.auth import get_user_model
 
-class RegisterApi(views.APIView):
+UserModel = get_user_model()
+
+# class RegisterApi(views.APIView):
+
+#     def post(self, request):
+#         serializer = user_serializer.UserSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+
+#         data = serializer.validated_data
+#         serializer.instance = services.create_user(user_dc=data)
+
+#         return response.Response(data={"message": "new user saved successfully to db"})
+
+class RegisterApi(generics.GenericAPIView):
+    serializer_class = user_serializer.RegisterUserSerializer
 
     def post(self, request):
-        serializer = user_serializer.UserSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
+
         serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        data = serializer.validated_data
-        serializer.instance = services.create_user(user_dc=data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return response.Response(data={"message": "new user saved successfully to db"})
-    
 class LoginApi(views.APIView):
 
     def post(self, request):
@@ -41,12 +57,6 @@ class LoginApi(views.APIView):
         token = services.create_token(user_id=user.id)
 
         return JsonResponse({"access_token": token})
-
-        # resp = response.Response()
-
-        # resp.set_cookie(key="jwt", value=token, httponly=True)
-
-        # return resp
 
 class UserApi(views.APIView):
     authentication_classes = (authentication.CustomAuthentication, )

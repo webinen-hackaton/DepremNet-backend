@@ -79,12 +79,16 @@ class UserManager(BaseUserManager):
        user.save()
 
        return user
+    
+def user_directory_path(instance, filename):
+    return 'media/user_{0}/{1}'.format(instance.id, filename)
 
 class User(AbstractBaseUser):
     first_name = models.CharField(verbose_name="First Name", max_length=255)
     last_name = models.CharField(verbose_name="Last Name", max_length=255)
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
     password = models.CharField(max_length=255)
+    profile_photo = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     phone_number = models.CharField(max_length=12, unique=True)
     nationality_id = models.CharField(max_length=11, unique=True)
     is_staff = models.BooleanField(default=False)

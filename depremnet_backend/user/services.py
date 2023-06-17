@@ -3,6 +3,7 @@ from datetime import datetime
 import jwt
 
 from django.conf import settings
+from rest_framework import exceptions
 
 from . import models
 
@@ -74,3 +75,15 @@ def create_token(user_id:int) -> str:
     )
     token = jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
     return token
+
+def parse_jwt_id(token:str) -> int:
+    try:
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
+        return (payload["id"])
+    except Exception:
+        raise exceptions.AuthenticalstionFailed("Unauthorized")
+
+def user_directory_path(instance, filename):
+  
+    # file will be uploaded to MEDIA_ROOT / user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.id, filename)

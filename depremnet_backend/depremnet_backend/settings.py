@@ -1,5 +1,5 @@
 
-
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "geolocation_fields",
     
     "user.apps.UserConfig",
+    "team.apps.TeamConfig",
     
 ]
 
@@ -140,3 +141,7 @@ AUTH_USER_MODEL = "user.User"
 
 JWT_SECRET = "GlCng2SwPrKnSIUy3n2bDHbMS3SmM49o"
 JWT_EXP_DELTA = timedelta(days=30)
+
+# Media Config
+MEDIA_ROOT = os.path.join(BASE_DIR, "depremnet_backend", "media")
+MEDIA_URL = "/media/"
