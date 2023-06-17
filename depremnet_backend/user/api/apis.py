@@ -75,7 +75,7 @@ class LocationSetApi(views.APIView):
 
     def post(self, request):
         
-        token = request.data["access_token"]
+        token = request.headers.get("Authorization")
         if not token:
             raise exceptions.AuthenticationFailed("Unauthorized")
         

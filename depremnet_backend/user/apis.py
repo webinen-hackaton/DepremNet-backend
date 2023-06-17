@@ -12,7 +12,7 @@ from . import (
     authentication
     )
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 
@@ -56,7 +56,9 @@ class LoginApi(views.APIView):
         
         token = services.create_token(user_id=user.id)
 
-        return JsonResponse({"access_token": token})
+        resp = JsonResponse({})
+        resp["Authorization"] = token
+        return resp
 
 class UserApi(views.APIView):
     authentication_classes = (authentication.CustomAuthentication, )
@@ -69,13 +71,13 @@ class UserApi(views.APIView):
 
         return response.Response(serializer.data)
 
-# class LogoutApi(views.APIView):
-#     authentication_classes = (authentication.CustomAuthentication, )
-#     permission_classes = (permissions.IsAuthenticated, )
+class LogoutApi(views.APIView):
+    authentication_classes = (authentication.CustomAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
 
-#     def post(self, request):
-#         resp = response.Response()
-#         resp.delete_cookie("jwt")
-#         resp.data = {"message": "successfully logged out"}
+    def post(self, request):
+        resp = response.Response()
+        resp.headers['Authorization'] = ""
+        resp.data = {"message": "successfully logged out"}
 
-#         return resp
+        return resp

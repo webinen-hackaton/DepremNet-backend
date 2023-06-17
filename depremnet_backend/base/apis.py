@@ -19,7 +19,7 @@ class LocationApi(generics.GenericAPIView):
     
     def post(self, request):
 
-        token = request.data["access_token"]
+        token = request.headers.get("Authorization")
         _id = services.parse_jwt_id(token)
         user = UserModel.objects.filter(id=_id).first()
 

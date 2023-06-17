@@ -10,7 +10,7 @@ from . import models
 class CustomAuthentication(authentication.BaseAuthentication):
 
     def authenticate(self, request):
-        token = request.data["access_token"]
+        token = request.headers.get("Authorization")
 
         if not token:
             return None

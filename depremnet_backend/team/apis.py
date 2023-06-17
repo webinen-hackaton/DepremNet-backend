@@ -126,8 +126,8 @@ class JobApi(views.APIView):
 
 
 class AddTeamMemberById(views.APIView):
-    # authentication_classes = (authentication.CustomAuthentication, )
-    # permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (authentication.CustomAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, )
 
     def put(self, request, team_id, user_id):
         team, user = services.get_team_and_user(team_id, user_id)
@@ -144,6 +144,8 @@ class AddTeamMemberById(views.APIView):
         return response.Response(data={"message": f"member added to team: {user.id} -> {team.id}"})
 
 class RemoveTeamMemeberById(views.APIView):
+    authentication_classes = (authentication.CustomAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, )
     
     def put(self, request, team_id, user_id):
         team, user = services.get_team_and_user(team_id, user_id)
