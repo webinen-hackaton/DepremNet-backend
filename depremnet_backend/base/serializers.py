@@ -11,5 +11,5 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Location
-        fields=["location", ]
+        fields=["location", "last_updated_date"]
         

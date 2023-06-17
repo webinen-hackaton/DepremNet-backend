@@ -9,6 +9,8 @@ from rest_framework import (
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 
+from base.serializers import LocationSerializer
+
 UserModel = get_user_model()
 
 from .. import serializers as user_serializer
@@ -58,12 +60,36 @@ class UserPhotoApi(generics.UpdateAPIView):
 
     serializer_class = user_serializer.UserImageSerializer
 
-class UserListApi(views.APIView):
+class UserListApi(generics.ListAPIView):
 
-    def get(self, request):
-        users = UserModel.objects.all()
+    queryset=UserModel.objects.all()
+    serializer_class = user_serializer.UserModelSerializer
+    # permission_classes = [permissions.IsAuthenticated]
 
-        serializer = user_serializer.UserModelSerializer(data=users, many=True)
-        serializer.is_valid(raise_exception=True)
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = user_serializer.UserModelSerializer(queryset, many=True)
+        return response.Response(data=serializer.data)
+    
+class LocationSetApi(views.APIView):
+
+    def post(self, request):
         
-        return response.Response(data=serializer.validated_data)
+        token = request.data["access_token"]
+        if not token:
+            raise exceptions.AuthenticationFailed("Unauthorized")
+        
+        _id = user_services.parse_jwt_id(token)
+        user = UserModel.objects.filter(id=_id).first()
+
+        if not user:
+            raise ValueError("user not exists in db")
+        
+        serializer = LocationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        location = serializer.save()
+        user.location = location
+        user.save()
+
+        return response.Response(data={"message": f"user locations setted successfully: {user.id}"})

@@ -49,9 +49,6 @@ class TeamApi(views.APIView):
     def post(self, request):# create one 
         if not request.user.is_staff:
             raise exceptions.AuthenticationFailed("Only admin user can create a team!")
-        
-        if not request.data["team_manager"]:
-            request.data["team_manager"] = request.user
 
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():

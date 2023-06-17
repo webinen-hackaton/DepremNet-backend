@@ -5,22 +5,24 @@ UserModel = get_user_model()
 
 from . import services
 
+from team.serializers import TeamSerializer
+from base.serializers import LocationSerializer
+
 ## 
 # team serializer
 
 ## 
 # location serializer
 
-class UserModelSerializer(serializers.HyperlinkedModelSerializer):
+class UserModelSerializer(serializers.ModelSerializer):
     
-    team=None
-    location=None
+    team=TeamSerializer(many=False, required=False)
+    location=LocationSerializer(many=False, required=False)
     
     class Meta:
         model=UserModel
         read_only_fields=["id"]
         exclude=["password"]
-
 
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
