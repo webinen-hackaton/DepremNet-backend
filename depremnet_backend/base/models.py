@@ -25,10 +25,5 @@ class Event(models.Model):
     
 
 class Location(models.Model):
-    person = models.OneToOneField(
-        UserModel,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
     location = fields.PointField()
     last_updated_date = models.DateTimeField(auto_now=True)

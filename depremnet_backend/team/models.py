@@ -22,7 +22,7 @@ class Status(models.Model): # team status
         return self.status_name
 
 class Team(models.Model):
-    # admin = models.ForeignKey()
+    team_manager = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="team_manager")
     team_name = models.CharField(max_length=50)
     team_type = models.ForeignKey(TeamType, on_delete=models.CASCADE, related_name="team_type")
     location = fields.PointField()

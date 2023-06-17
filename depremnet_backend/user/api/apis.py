@@ -57,3 +57,13 @@ class UserPhotoApi(generics.UpdateAPIView):
     queryset = UserModel.objects.all()
 
     serializer_class = user_serializer.UserImageSerializer
+
+class UserListApi(views.APIView):
+
+    def get(self, request):
+        users = UserModel.objects.all()
+
+        serializer = user_serializer.UserModelSerializer(data=users, many=True)
+        serializer.is_valid(raise_exception=True)
+        
+        return response.Response(data=serializer.validated_data)

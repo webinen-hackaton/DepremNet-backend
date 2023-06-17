@@ -92,8 +92,15 @@ class User(AbstractBaseUser):
     phone_number = models.CharField(max_length=12, unique=True)
     nationality_id = models.CharField(max_length=11, unique=True)
     is_staff = models.BooleanField(default=False)
-    team_id = models.ForeignKey(
+    team = models.ForeignKey(
         'team.Team',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        default=None
+    )
+    location = models.ForeignKey(
+        'base.Location',
         on_delete=models.SET_NULL,
         blank=True,
         null=True,

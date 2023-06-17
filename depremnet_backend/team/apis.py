@@ -17,15 +17,18 @@ from .models import (
 )
 from django.http import JsonResponse
 
-from . import services
+from . import services, authentication
+from rest_framework import permissions
 
 class TeamApi(views.APIView):
-    # authentication_classes = (authentication.CustomAuthentication, )
-    # permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (authentication.CustomAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
 
     def get(self, request): # get all
+
         try:
-            teams = Team.objects.all()
+            user = request.user
+            teams = Team.objects.filter(team_manager=user)
             serializer = TeamSerializer(teams, many=True)
             data = serializer.data
 
@@ -44,6 +47,12 @@ class TeamApi(views.APIView):
             return response.Response({"error": str(e)}, status=500)
 
     def post(self, request):# create one 
+        if not request.user.is_staff:
+            raise exceptions.AuthenticationFailed("Only admin user can create a team!")
+        
+        if not request.data["team_manager"]:
+            request.data["team_manager"] = request.user
+
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -51,6 +60,9 @@ class TeamApi(views.APIView):
         return response.Response(serializer.errors, status=400)
     
 class TeamByIdApi(views.APIView):
+    authentication_classes = (authentication.CustomAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    
     def get(self, request, team_id): #get one by id
         try:
             team = Team.objects.get(pk=team_id)
