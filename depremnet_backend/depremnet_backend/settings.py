@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "geolocation_fields",
     
+    "base.apps.BaseConfig",
     "user.apps.UserConfig",
     "team.apps.TeamConfig",
     
@@ -143,5 +144,5 @@ JWT_SECRET = "GlCng2SwPrKnSIUy3n2bDHbMS3SmM49o"
 JWT_EXP_DELTA = timedelta(days=30)
 
 # Media Config
-MEDIA_ROOT = os.path.join(BASE_DIR, "depremnet_backend", "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
