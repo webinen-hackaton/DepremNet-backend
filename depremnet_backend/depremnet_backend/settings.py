@@ -124,6 +124,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+APPEND_SLASH=True
+
 # Rest Framework
 # REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
