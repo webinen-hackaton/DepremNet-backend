@@ -17,8 +17,12 @@ from .models import (
 )
 from django.http import JsonResponse
 
+from . import services
 
 class TeamApi(views.APIView):
+    # authentication_classes = (authentication.CustomAuthentication, )
+    # permission_classes = (permissions.IsAuthenticated, )
+
     def get(self, request): # get all
         try:
             teams = Team.objects.all()
@@ -88,3 +92,57 @@ class TeamByIdApi(views.APIView):
             raise exceptions.NotFound("Team not found")
         except Exception as e:
             return response.Response({"error": str(e)}, status=500)
+
+
+class TeamTypeApi(views.APIView):
+
+    def get(self, request):
+        types = TeamType.objects.all()
+        serializer = TeamTypeSerializer(types, many=True)
+        return response.Response(serializer.data)
+
+class TeamStatusApi(views.APIView):
+   
+   def get(self, request):
+        status = Status.objects.all()
+        serializer = StatusSerializer(status, many=True)
+        return response.Response(serializer.data)
+
+class JobApi(views.APIView):
+    
+    def get(self, request): # list all jobs (mmedical, etc.)
+        jobs = Job.objects.all()
+        serializer = JobSerializer(jobs, many=True)
+        return response.Response(serializer.data)
+
+
+class AddTeamMemberById(views.APIView):
+    # authentication_classes = (authentication.CustomAuthentication, )
+    # permission_classes = (permissions.IsAuthenticated, )
+
+    def put(self, request, team_id, user_id):
+        team, user = services.get_team_and_user(team_id, user_id)
+
+        if not user.is_staff:
+            raise ValueError("user should be a member for including to a team")
+
+        if user.team_id is not None:
+            raise ValueError("member should not be in another group")
+
+        user.team_id = team.id
+        user.save()
+
+        return response.Response(data={"message": f"member added to team: {user.id} -> {team.id}"})
+
+class RemoveTeamMemeberById(views.APIView):
+    
+    def put(self, request, team_id, user_id):
+        team, user = services.get_team_and_user(team_id, user_id)
+
+        if user.team_id is None:
+            raise ValueError("User should ne in a team for removing request")
+        
+        user.team_id = None
+        user.save()
+
+        return response.Response(data={"message": f"user successfully removed from team: {user.id} -> {team.id}"})

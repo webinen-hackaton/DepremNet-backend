@@ -2,12 +2,14 @@ from django.db import models
 from geolocation_fields.models import fields
 from django.contrib.auth import get_user_model
 
-Author = get_user_model()
+from geolocation_fields.models import fields
+
+UserModel = get_user_model()
 
 # Create your models here.
 class Event(models.Model):
     author = models.OneToOneField(
-        Author,
+        UserModel,
         on_delete=models.CASCADE,
         primary_key=True
     )
@@ -20,3 +22,13 @@ class Event(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title}, ({self.created_date})"
+    
+
+class Location(models.Model):
+    person = models.OneToOneField(
+        UserModel,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    location = fields.PointField()
+    last_updated_date = models.DateTimeField(auto_now=True)

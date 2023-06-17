@@ -6,3 +6,10 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.Event
         fields="__all__"
+
+class LocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=models.Location
+        fields=["location", ]
+        

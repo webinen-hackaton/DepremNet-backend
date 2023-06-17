@@ -11,4 +11,10 @@ urlpatterns = [
     # path("create/", None, name="team_create"),
     path('', apis.TeamApi.as_view(), name='teams'),
     path('<int:team_id>', apis.TeamByIdApi.as_view(), name='team-detail'),
+    path('<int:team_id>/add/<int:user_id>', apis.AddTeamMemberById.as_view(), name='add_team_member'),
+    path('<int:team_id>/remove/<int:user_id>', apis.RemoveTeamMemeberById.as_view(), name='remove_team_member'),
+    
+    path('types/', apis.TeamTypeApi.as_view(), name='team_types'),
+    path('status/', apis.TeamStatusApi.as_view(), name='statuses'),
+    # path('jobs/', apis.)
 ]

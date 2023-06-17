@@ -57,24 +57,3 @@ class UserPhotoApi(generics.UpdateAPIView):
     queryset = UserModel.objects.all()
 
     serializer_class = user_serializer.UserImageSerializer
-
-    # def put(self, request, id):
-        
-    #     serializer = user_serializer.PhotoSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     data = serializer.validated_data
-
-    #     token = request.data["access_token"]
-    #     if not token:
-    #         raise exceptions.AuthenticationFailed("Unauthorized")
-
-    #     jwt_id = user_services.parse_jwt_id(token)
-    #     user = user_services.user_id_selector(id)
-
-    #     if jwt_id != user.id:
-    #         print(jwt_id, user.id)
-    #         raise exceptions.AuthenticationFailed("user id should match with requester")
-        
-    #     user.profile_photo.
-
-    #     return response.Response(data={"message": "profile photo changed successfully"})
