@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from . import models
 from django.contrib.auth import get_user_model
+from .models import Post
 
 UserModel = get_user_model()
 
@@ -11,10 +12,17 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields=["id"]
         exclude=["password"]
 
-
-class PostSerializer(serializers.ModelSerializer):
-    author = UserSerializer(many=False)
+class CreatePostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Post
-        fields=["person", "post_description", "post_image", "post_created_date", ]
+        exclude=["post_created_date", ]
+
+class PostSerializer(serializers.ModelSerializer):
+    
+    person = UserSerializer(many=False, read_only = True)
+
+    class Meta:
+        model=Post
+        fields="__all__"
+        # read_only_fields = ["id"]

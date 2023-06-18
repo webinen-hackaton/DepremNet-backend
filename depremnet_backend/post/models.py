@@ -12,8 +12,7 @@ def user_directory_path(instance, filename):
 class Post(models.Model):
     person = models.ForeignKey(
         UserModel,
-        on_delete=models.CASCADE,
-        related_name="person_post"
+        on_delete=models.CASCADE
     ),
     post_description = models.TextField(max_length=1000)
     post_image = models.ImageField(upload_to=user_directory_path, blank=True, null=True, default=None)
