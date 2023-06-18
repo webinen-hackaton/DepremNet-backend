@@ -45,7 +45,7 @@ class UpdateSerializer(serializers.Serializer):
 
 class RegisterUserSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(max_length=128, min_length=6, write_only=True)
+    password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:
         model=UserModel

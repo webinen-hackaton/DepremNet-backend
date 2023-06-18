@@ -11,6 +11,10 @@ from django.contrib.auth import get_user_model
 
 UserModel = get_user_model()
 
+class CreateEventApi(generics.CreateAPIView):
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventCreateSerializer
+
 class EventApi(generics.ListAPIView):
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventSerializer
