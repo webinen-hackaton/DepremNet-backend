@@ -26,3 +26,8 @@ class PostSerializer(serializers.ModelSerializer):
         model=Post
         fields="__all__"
         # read_only_fields = ["id"]
+    
+    def get_photo_url(self, obj):
+        request = self.context.get('request')
+        photo_url = obj.fingerprint.url
+        return request.build_absolute_uri(photo_url)
